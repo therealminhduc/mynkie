@@ -1,0 +1,46 @@
+{{ define "header" }}
+<header class="site-header">
+    <nav class="tabs">
+        <a href="index.html" class="{{ if eq .Current "about" }}active{{ end }}">about</a>
+        <a href="contact.html" class="{{ if eq .Current "contact" }}active{{ end }}">contact</a>
+        <a href="blog.html" class="{{ if eq .Current "blog" }}active{{ end }}">blog</a>
+    </nav>
+</header>
+{{ end }}
+
+{{ define "footer" }}
+<footer class="site-footer">
+    <p>© {{ .Year }} mynkie. All rights reserved.</p>
+</footer>
+{{ end }}
+
+
+{{ define "base" }}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ .Title }}</title>
+        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+
+    <body>
+        {{ template "header" . }}
+        <main>
+            <div>
+                {{ .Content }}
+            </div>
+        </main>
+        {{ template "footer" . }}
+
+        <script>
+            document.querySelectorAll('a[href^="http"]').forEach(function(a) {
+                if (a.hostname !== location.hostname) {
+                    a.setAttribute('target', '_blank');
+                    a.setAttribute('rel', 'noopener noreferrer');
+                }
+            });
+        </script>
+    </body>
+</html>
+{{ end }}
