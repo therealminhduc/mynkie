@@ -2,6 +2,7 @@
 .vscode/
 .env
 public/
+.DS_Store
 
 # Go build cache and modules
 *.log
