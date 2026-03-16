@@ -1,0 +1,18 @@
+# Reference for integrating mynkie into an existing homelab docker-compose stack.
+# Copy the service definitions below into your homelab's docker-compose.yml.
+#
+# To apply: docker compose up -d --remove-orphans
+
+services:
+  mynkie:
+    image: ghcr.io/therealminhduc/mynkie:latest
+    container_name: mynkie
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 mynkie  # poll every 5 minutes, watch only mynkie
