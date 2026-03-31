@@ -1,4 +1,5 @@
-html, body {
+html,
+body {
     min-height: 100vh;
     margin: 0;
 }
@@ -43,7 +44,6 @@ main p {
     line-height: 1.65;
 }
 
-
 .tabs {
     display: inline-flex;
     gap: 1rem;
@@ -70,4 +70,37 @@ main p {
 .site-footer p {
     margin: 0;
     font-style: italic;
+}
+
+.blog-post {
+    margin-bottom: 0.5rem;
+}
+
+.blog-title {
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.85rem;
+    font-family: monospace;
+    color: #1a1a1a;
+    background: #eae6db;
+    padding: 0.4rem 0.6rem;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 0.75rem 0 0.5rem;
+}
+
+.blog-date {
+    font-size: 0.8rem;
+    color: #888;
+    margin-left: 0.5rem;
+}
+
+.blog-content {
+    display: none;
+    padding-left: 1rem;
+    margin: 0.5rem 0;
+}
+
+.blog-content.expanded {
+    display: block;
 }

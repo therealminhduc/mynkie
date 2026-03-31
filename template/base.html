@@ -1,9 +1,9 @@
 {{ define "header" }}
 <header class="site-header">
     <nav class="tabs">
-        <a href="index.html" class="{{ if eq .Current "about" }}active{{ end }}">about</a>
-        <a href="contact.html" class="{{ if eq .Current "contact" }}active{{ end }}">contact</a>
-        <a href="blog.html" class="{{ if eq .Current "blog" }}active{{ end }}">blog</a>
+        <a href="/index.html" class="{{ if eq .Current "about" }}active{{ end }}">about</a>
+        <a href="/contact.html" class="{{ if eq .Current "contact" }}active{{ end }}">contact</a>
+        <a href="/blog.html" class="{{ if eq .Current "blog" }}active{{ end }}">blog</a>
     </nav>
 </header>
 {{ end }}
@@ -40,6 +40,32 @@
                     a.setAttribute('rel', 'noopener noreferrer');
                 }
             });
+
+            document.querySelectorAll('.blog-title').forEach(function(title) {
+                title.addEventListener('click', function() {
+                    var slug = this.getAttribute('data-slug');
+                    var content = document.getElementById('post-' + slug);
+                    if (!content) return;
+
+                    if (!content.classList.contains('loaded')) {
+                        fetch('/posts/' + slug + '.json')
+                            .then(function(r) { return r.text(); })
+                            .then(function(html) {
+                                content.innerHTML = html;
+                                content.classList.add('loaded');
+                                content.classList.add('expanded');
+                            });
+                    } else {
+                        content.classList.toggle('expanded');
+                    }
+                });
+            });
+
+            var expanded = document.querySelector('[data-expanded="true"]');
+            if (expanded) {
+                var title = expanded.previousElementSibling;
+                if (title) title.click();
+            }
         </script>
     </body>
 </html>
