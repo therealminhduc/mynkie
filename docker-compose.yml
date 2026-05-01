@@ -1,13 +1,23 @@
 # Reference for integrating mynkie into an existing homelab docker-compose stack.
-# Copy the service definitions below into your homelab's docker-compose.yml.
+# The homelab stack should serve the static site extracted by homelab/scripts/deploy.sh.
 #
-# To apply: docker compose up -d --remove-orphans
+# To apply: set MYNKIE_SITE_DIR in homelab/.env, then run homelab/scripts/deploy.sh.
 
 services:
-  mynkie:
+  mynkie-site:
     image: ghcr.io/therealminhduc/mynkie:latest
-    container_name: mynkie
-    restart: unless-stopped
+    container_name: mynkie-site
+    restart: "no"
+    volumes:
+      - ${MYNKIE_SITE_DIR:-./data/mynkie-site}:/site
+    entrypoint: ["/bin/sh", "-ec"]
+    command:
+      - |
+        release_id="$$(date -u +%Y%m%d%H%M%S)"
+        release_dir="/site/releases/$$release_id"
+        mkdir -p "$$release_dir"
+        cp -a /usr/share/nginx/html/. "$$release_dir/"
+        ln -sfn "releases/$$release_id" /site/current
 
   watchtower:
     image: containrrr/watchtower
@@ -15,4 +25,4 @@ services:
     restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 300 mynkie  # poll every 5 minutes, watch only mynkie
+    command: --interval 300 --include-stopped --revive-stopped mynkie-site
